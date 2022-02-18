@@ -1,0 +1,13 @@
+CREATE Function F_Samedi()
+RETURNS DATE[]
+AS $$
+DECLARE arr_len DATE[52] := array[]::Date[];
+BEGIN
+	FOR i in 0..51 LOOP
+		arr_len[i] := current_date - 7 + cast(abs(extract(dow from current_date - 7) - 7*(i+1)) +6 as int);
+	END LOOP;
+	RETURN arr_len;
+
+END;
+$$
+LANGUAGE 'plpgsql';

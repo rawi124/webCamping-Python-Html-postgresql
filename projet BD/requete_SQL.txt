@@ -1,0 +1,89 @@
+CREATE DOMAIN dom_sexe AS CHAR(1) CHECK (VALUE IN ('M','F'));
+CREATE DOMAIN dom_age AS INTEGER CHECK ( VALUE > 18 )) ;
+---------------------------------------------------------------------------------------
+num_client 	INTEGER PRIMARY KEY,
+Nom 		VARCHAR(50),
+sexe            dom_sexe ,
+age             dom_age ,
+Prenom 		VARCHAR(50));
+----------------------------------------------------------------------------------------
+CREATE TABLE Activite (
+
+Nom_activite  VARCHAR(50) PRIMARY KEY ,
+tarif_activite VARCHAR(50));
+----------------------------------------------------------------------------------------
+CREATE TABLE Employes (
+
+num_employe  	INTEGER PRIMARY KEY,
+Nom_employe 	VARCHAR(50),
+domaine_activite VARCHAR(50),
+salaire_heure    INTEGER ,
+Prenom_employe 	VARCHAR(50));
+
+-----------------------------------------------------------------------------------------
+CREATE TABLE Emplacement(
+
+num_emplacement INTEGER PRIMARY KEY ,
+Nom_emplacement  VARCHAR(50),
+tarif_emplacement INTEGER );
+----------------------------------------------------------------------------------------
+CREATE TABLE saison(
+
+num_saison INTEGER PRIMARY KEY ,
+Nom_saison  VARCHAR(50),
+coefficient_majoration FLOAT );
+------------------------------------------------------------------------------------------
+CREATE TABLE sejour (
+
+num_client INTEGER ,
+date_deb_sejour DATE ,
+date_fin_sejour DATE CHECK (date_deb_sejour < date_fin_sejour),
+num emplacement INTEGER ,
+CONSTRAINT fk_num_emplacement FOREIGN KEY (num_emplacement) REFERENCES emplacement(num_emplacement),
+CONSTRAINT fk_num_client FOREIGN KEY (num_client) REFERENCES client (num_client));
+------------------------------------------------------------------------------------------
+CREATE TABLE menu (
+
+num_menu INTEGER PRIMARY KEY,
+type_menu VARCHAR (50),
+contenu VARCHAR (255),
+tarif_menu INTEGER ) ;
+-----------------------------------------------------------------------------------------
+CREATE TABLE supplement (
+
+nom_supp VARCHAR (50) PRIMARY KEY ,
+tarif_supp INTEGER ) ;
+------------------------------------------------------------------------------------------
+CREATE TABLE Reservation_Activite (
+
+num_client INTEGER ,
+nom_activite VARCHAR(50),
+nb_activite INTEGER ,
+PRIMARY KEY(num_client,nom_activite),
+CONSTRAINT FK_num_client FOREIGN KEY (num_client) REFERENCES client(num_client),
+CONSTRAINT FK_Id_activite FOREIGN KEY (nom_activite) REFERENCES activite(nom_activite));
+------------------------------------------------------------------------------------------
+CREATE TABLE Reservation_Menu (
+
+num_client INTEGER ,
+num_menu INTEGER ,
+PRIMARY KEY(num_client,num_menu),
+CONSTRAINT FK_num_client FOREIGN KEY (num_client) REFERENCES client(num_client),
+CONSTRAINT FK_num_menu FOREIGN KEY (num_menu) REFERENCES menu(num_menu));
+----------------------------------------------------------------------------------------
+CREATE TABLE Reservation_supplement (
+
+num_client INTEGER ,
+nom_supp VARCHAR(50) ,
+nb_supplement INTEGER ,
+PRIMARY KEY(num_client,nom_supp),
+CONSTRAINT FK_num_client FOREIGN KEY (num_client) REFERENCES client(num_client),
+CONSTRAINT FK_nom_supp FOREIGN KEY (nom_supp) REFERENCES supplement(nom_supp));
+----------------------------------------------------------------------------------------
+CREATE TABLE saison_emplacement (
+num_saison INTEGER ,
+num_emplacement INTEGER ,
+PRIMARY KEY(num_saison , num_emplacement) ,
+tarif FLOAT ,
+CONSTRAINT fk_num_saison FOREIGN KEY (num_saison) REFERENCES saison(num_saison) ,
+CONSTRAINT fk_num_emplacement FOREIGN KEY ( num_emplacement ) REFERENCES emplacement(num_emplacement));
